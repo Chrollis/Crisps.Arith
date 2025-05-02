@@ -123,11 +123,23 @@ void GuessNumber::check_num(clock_t delta) {
 							b = m;
 						}
 						mistaken = 0;
-						state = 0;
+						if (b - a == 2) {
+							state = 2;
+							succeeded = 1;
+							if (!greyified) {
+								greyify_blur_screen();
+								greyified = 1;
+							}
+						}
+						else {
+							mistaken = 0;
+							state = 0;
+						}
 					}
 					else {
 						mistaken = 0;
 						state = 2;
+						succeeded = 0;
 						if (!greyified) {
 							greyify_blur_screen();
 							greyified = 1;
@@ -165,7 +177,12 @@ void GuessNumber::check_num(clock_t delta) {
 	}
 }
 void GuessNumber::ask_restart() {
-	out = std::to_string(c) + "号爆炸，是否再来【Y/N】?";
+	if (succeeded) {
+		out = "拆弹成功，是否再来【Y/N】?";
+	}
+	else {
+		out = std::to_string(c) + "号爆炸，是否再来【Y/N】?";
+	}
 }
 void GuessNumber::ask_quit() {
 	out = "是否返回主菜单【Y/N】?";

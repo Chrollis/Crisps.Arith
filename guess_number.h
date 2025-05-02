@@ -8,6 +8,7 @@ class GuessNumber : public Scene {
 	int m = 0;
 	bool generated = 0;
 	bool checked = 0;
+	bool succeeded = 0;
 public:
 	GuessNumber() = default;
 	~GuessNumber() = default;

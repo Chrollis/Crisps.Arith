@@ -122,7 +122,7 @@ void Points24::input(const ExMessage& msg) {
 		}
 		else if (msg.vkcode == VK_ESCAPE) {
 			last_state = state;
-			state = 4;
+			state = 5;
 		}
 	}
 }
