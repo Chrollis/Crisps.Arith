@@ -8,7 +8,9 @@ private:
 	bool checked = 0;
 
 public:
-	ArithAdmin() = default;
+	ArithAdmin() {
+		CreateDirectoryW(L".\\data", nullptr);
+	}
 	~ArithAdmin() = default;
 
 	void enter();

@@ -8,7 +8,18 @@ void ArithAdmin::draw() {
 	setbkmode(TRANSPARENT);
 	setlinestyle(PS_SOLID, 1);
 	if (state < 8) {
-		normal_draw();
+		Graph_IO::output_line(DARKGRAY, input_line_position);
+		Graph_IO::draw_text(BLACK, out, &question_rect,
+			DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+		if (state != 0 && state != 1) {
+			Graph_IO::draw_text(MIDNIGHTBLUE, Graph_IO::input + "<-", &input_rect,
+				DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
+		}
+		else {
+			std::string str(Graph_IO::input.length(), '*');
+			Graph_IO::draw_text(MIDNIGHTBLUE, str + "<-", &input_rect,
+				DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
+		}
 		if (state % 2 == 1) {
 			Graph_IO::draw_text(LIMEGREEN, feedback, &feedback_rect,
 				DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
