@@ -9,13 +9,14 @@ void MainMenu::draw() {
 	setbkmode(TRANSPARENT);
 	setlinestyle(PS_SOLID, 1);
 
-	if (state < 2) {
+	if (state == InputMode ||
+		state == CheckMode) {
 		normal_draw();
-		if (state == 1) {
+		if (state == CheckMode) {
 			Graph_IO::draw_text(LIMEGREEN, feedback, &feedback_rect,
 				DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		}
-		else if (mistaken) {
+		else if (mode_check_mistaken) {
 			Graph_IO::draw_text(FIREBRICK3, feedback, &feedback_rect,
 				DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		}
@@ -24,48 +25,53 @@ void MainMenu::draw() {
 		pop_up_draw();
 	}
 }
-void MainMenu::proceed(clock_t delta) {
+void MainMenu::timekeep(clock_t delta) {
+	la.timekeep(delta);
+}
+void MainMenu::proceed() {
 	switch (state) {
-	case 0:
+	case InputMode:
 		input_mode();
 		break;
-	case 1:
-		check_mode(delta);
+	case CheckMode:
+		check_mode();
 		break;
-	case 2:
+	case AskQuit:
 		ask_quit();
 		break;
-	case 3:
-		quit(delta);
+	case Quit:
+		quit();
 		break;
 	default:
 		break;
 	}
 }
 void MainMenu::input(const ExMessage& msg) {
-	if (state == 0) {
+	if (state == InputMode) {
 		Graph_IO::input_text(msg);
 		if (msg.message == WM_KEYDOWN &&
 			(msg.vkcode == VK_RETURN ||
 				msg.vkcode == VK_SEPARATOR)) {
-			state = 1;
+			state = CheckMode;
 			Graph_IO::input.pop_back();
 		}
 	}
 	if (msg.message == WM_KEYDOWN) {
-		if (state == 2) {
+		if (state == AskQuit) {
 			if (msg.vkcode == 'Y' ||
-				msg.vkcode == VK_RETURN || msg.vkcode == VK_SEPARATOR) {
-				state = 3;
+				msg.vkcode == VK_RETURN ||
+				msg.vkcode == VK_SEPARATOR) {
+				state = Quit;
 			}
-			else if (msg.vkcode == 'N' || msg.vkcode == VK_ESCAPE) {
+			else if (msg.vkcode == 'N' ||
+				msg.vkcode == VK_ESCAPE) {
 				state = last_state;
-				greyified = 0;
+				screenshotted = 0;
 			}
 		}
 		else if (msg.vkcode == VK_ESCAPE) {
 			last_state = state;
-			state = 2;
+			state = AskQuit;
 		}
 	}
 }
@@ -76,48 +82,49 @@ void MainMenu::exit() {
 void MainMenu::input_mode() {
 	out = "请输入模式名：";
 }
-void MainMenu::check_mode(clock_t delta) {
+void MainMenu::check_mode() {
 	out = "输入结束。";
 	std::vector<std::string>legal_mode = {
 	"kousuan",
 	"caishuzi",
 	"24dian"
 	};
-	if (!checked) {
-		mistaken = 1;
+	if (!mode_checked) {
+		mode_check_mistaken = 1;
 		for (const std::string& mode : legal_mode) {
 			if (Graph_IO::input == mode) {
-				mistaken = 0;
+				mode_check_mistaken = 0;
 				break;
 			}
 		}
-		checked = 1;
+		mode_checked = 1;
 	}
-	if (!mistaken) {
-		if (proceed_loading(feedback, delta, 5, "该模式存在，正在跳转。")) {
+	if (!mode_check_mistaken) {
+		if (la.proceed_loading(feedback, 5, "该模式存在，正在跳转。")) {
 			current_mode = Graph_IO::input;
-			ended = 1;
+			current_ended = 1;
 		}
 	}
 	else {
-		if (proceed_loading(feedback, delta)) {
-			state = 0;
-			checked = 0;
+		if (la.proceed_loading(feedback)) {
+			state = InputMode;
+			la.reset();
 			Graph_IO::input.clear();
+			mode_checked = 0;
 			feedback = "该模式不存在，请重新输入。";
 		}
 	}
 }
 void MainMenu::ask_quit() {
 	out = "是否退出程序【Y/N】?";
-	if (!greyified) {
+	if (!screenshotted) {
 		greyify_blur_screen();
-		greyified = 1;
+		screenshotted = 1;
 	}
 }
-void MainMenu::quit(clock_t delta) {
-	if (proceed_loading(out, delta, 5, "正在退出。")) {
+void MainMenu::quit() {
+	if (la.proceed_loading(out, 5, "正在退出。")) {
 		current_mode = "exit";
-		ended = 1;
+		current_ended = 1;
 	}
 }

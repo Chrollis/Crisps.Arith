@@ -8,6 +8,7 @@
 #include <unordered_set>
 #include <set>
 #include <algorithm>
+#include <regex>
 #include "resource.h"
 
 #define M_PI 3.1415926

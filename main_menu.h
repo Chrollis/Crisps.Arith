@@ -3,20 +3,32 @@
 
 class MainMenu :public Scene {
 private:
-	bool checked = 0;
+	int state = InputMode;
+	int last_state = InputMode;
+	bool mode_check_mistaken = 0;
+	bool screenshotted = 0;
+	bool mode_checked = 0;
+	Loading la;
 public:
 	MainMenu() = default;
 	~MainMenu() = default;
 
 	void enter();
 	void draw();
-	void proceed(clock_t delta);
+	void timekeep(clock_t delta);
+	void proceed();
 	void input(const ExMessage& msg);
 	void exit();
-
+private:
+	enum State {
+		InputMode,
+		CheckMode,
+		AskQuit,
+		Quit,
+	};
 private:
 	void input_mode();
-	void check_mode(clock_t delta);
+	void check_mode();
 	void ask_quit();
-	void quit(clock_t delta);
+	void quit();
 };

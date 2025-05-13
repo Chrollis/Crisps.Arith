@@ -34,6 +34,7 @@ public:
 	void switch_to(SceneType type);
 
 	void draw();
-	void proceed(clock_t delta);
+	void timekeep(clock_t delta);
+	void proceed();
 	void input(const ExMessage& msg);
 };

@@ -19,9 +19,9 @@ void FpsController::draw() {
 	counter = (++counter) % fps_target;
 	std::ostringstream oss;
 	oss << "Fps = " << actual_fps << " : " << fps_target;
-	Graph_IO::set_text_style(L"Ï¼ðÍÂþºÚ", SIDE * 3 / 5);
+	Graph_IO::set_text_style(L"Ï¼ðÍÂþºÚ", SIDE);
 	setbkmode(TRANSPARENT);
-	Graph_IO::output_text(GOLDENROD1, SIDE * 2 / 5, HEIGHT - SIDE, oss.str());
+	Graph_IO::output_text(GOLDENROD1, SIDE / 2, HEIGHT - SIDE * 6 / 5, oss.str());
 }
 
 void SceneController::switch_list(SceneType type) {
@@ -58,8 +58,11 @@ void SceneController::switch_to(SceneType type) {
 	switch_list(type);
 	current->enter();
 }
-void SceneController::proceed(clock_t delta) {
-	current->proceed(delta);
+void SceneController::timekeep(clock_t delta) {
+	current->timekeep(delta);
+}
+void SceneController::proceed() {
+	current->proceed();
 }
 void SceneController::draw() {
 	Graph_IO::solid_rectangle(LIGHTGRAY, 0, 0, WIDTH, HEIGHT);

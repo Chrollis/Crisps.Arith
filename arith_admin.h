@@ -5,8 +5,12 @@ class ArithAdmin :public Scene {
 private:
 	std::string variable;
 	Arithmetic* current = nullptr;
+	int state = InputPassword;
+	int last_state = InputPassword;
+	bool check_mistaken = 0;
+	bool screenshotted = 0;
 	bool checked = 0;
-
+	Loading la;
 public:
 	ArithAdmin() {
 		CreateDirectoryW(L".\\data", nullptr);
@@ -15,23 +19,39 @@ public:
 
 	void enter();
 	void draw();
-	void proceed(clock_t delta);
+	void timekeep(clock_t delta);
+	void proceed();
 	void input(const ExMessage& msg);
 	void exit();
-
+private:
+	enum State {
+		InputPassword,
+		CheckPassword,
+		InputID,
+		CheckID,
+		InputVariable,
+		CheckVariable,
+		InputValue,
+		CheckValue,
+		AskBack,
+		BackUser,
+		BackVariable,
+		AskQuit,
+		Quit
+	};
 private:
 	void input_password();
-	void check_password(clock_t delta);
+	void check_password();
 	void input_id();
-	void check_id(clock_t delta);
+	void check_id();
 	void input_variable();
-	void check_variable(clock_t delta);
+	void check_variable();
 	void input_value();
 	void renew_password();
-	void check_value(clock_t delta);
+	void check_value();
 	void ask_back();
-	void back_user(clock_t delta);
-	void back_variable(clock_t delta);
+	void back_user();
+	void back_variable();
 	void ask_quit();
-	void quit(clock_t delta);
+	void quit();
 };

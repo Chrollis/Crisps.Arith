@@ -22,15 +22,25 @@ private:
 		{ 0,{0,10},{0,10} }
 	};
 private:
-	COLORREF feedback_color = BLACK;
-	int question_count = 0;
 	std::string last_question;
+	std::string question;
 	std::string show_score;
 	std::string answer;
+	int state = InputAnswer;
+	int last_state = InputAnswer;
 	int wrong_count = 0;
-	clock_t timer = 0;
+	int question_count = 0;
+	clock_t thinking_timer = 0;
+	bool thinking = 0;
+	bool answer_check_mistaken = 0;
+	bool screenshotted = 0;
+	bool answer_checked = 0;
+	bool question_generated = 0;
+	bool last_wrong = 0;
 	bool bonused = 0;
-	bool saving = 0;
+	bool whether_to_save = 0;
+	
+	Loading la;
 public:
 	Arithmetic() {
 		CreateDirectoryW(L".\\data", nullptr);
@@ -39,18 +49,29 @@ public:
 
 	void enter();
 	void draw();
-	void proceed(clock_t delta);
+	void timekeep(clock_t delta);
+	void proceed();
 	void input(const ExMessage& msg);
 	void exit();
-
 private:
-	void generate_question(clock_t delta);
+	enum State {
+		InputAnswer,
+		CheckAnswer,
+		SettleScore,
+		SaveScore,
+		AskNewTurn,
+		AskQuit,
+		Quit
+	};
+private:
+	void generate_question();
+	void input_answer();
 	void check_answer();
 	void settle_score();
-	void save_score(clock_t delta);
+	void save_score();
 	void ask_new_turn();
 	void ask_quit();
-	void quit(clock_t delta);
+	void quit();
 
 	bool log(std::string out_str);
 	bool read();

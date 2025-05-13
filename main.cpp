@@ -28,14 +28,15 @@ int WinMain(
         }
 
         current_tick = clock();
-        game.proceed(current_tick - last_tick);
+        game.timekeep(current_tick - last_tick);
+        game.proceed();
         last_tick = current_tick;
 
         cleardevice();
         game.draw();
         //fps_controller.draw();
 
-        if (Scene::ended) {
+        if (Scene::current_ended) {
             if (Scene::current_mode == "kousuan") {
                 game.switch_to(STArithLogin);
             }
@@ -61,13 +62,14 @@ int WinMain(
 
         FlushBatchDraw();
 
-        if (Scene::ended) {
-            Scene::ended = 0;
+        if (Scene::current_ended) {
+            Scene::current_ended = 0;
         }
         else {
             fps_controller.delay();
         }
     }
+
     EndBatchDraw();
 
     closegraph();

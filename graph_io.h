@@ -2,7 +2,7 @@
 #include "utils.h"
 
 #define SIDE 50
-#define WIDTH 13 * SIDE
+#define WIDTH 16 * SIDE
 #define HEIGHT 8 * SIDE
 
 #define MIDNIGHTBLUE 0x701919
