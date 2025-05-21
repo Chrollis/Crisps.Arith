@@ -1,5 +1,6 @@
 #pragma once
-#include "graph_io.h"
+#include "graphio.h"
+#include "timer.h"
 
 enum SceneType {
 	STMainMenu,

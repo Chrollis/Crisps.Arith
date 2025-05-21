@@ -4,7 +4,7 @@ void ArithAdmin::enter() {
 	enter_loading(5, "管理员界面加载中。");
 }
 void ArithAdmin::draw() {
-	Graph_IO::set_text_style(L"霞鹜漫黑");
+	Graphio::set_text_style(L"霞鹜漫黑");
 	setbkmode(TRANSPARENT);
 	setlinestyle(PS_SOLID, 1);
 	if (state == InputPassword ||
@@ -15,32 +15,32 @@ void ArithAdmin::draw() {
 		state == CheckVariable ||
 		state == InputValue ||
 		state == CheckValue) {
-		Graph_IO::output_line(DARKGRAY, input_line_position);
-		Graph_IO::draw_text(BLACK, out, &question_rect,
+		Graphio::output_line(DARKGRAY, input_line_position);
+		Graphio::draw_text(BLACK, out, &question_rect,
 			DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 		if (state != InputPassword &&
 			state != CheckPassword) {
-			Graph_IO::draw_text(MIDNIGHTBLUE, Graph_IO::input + "<-", &input_rect,
+			Graphio::draw_text(MIDNIGHTBLUE, Graphio::input + "<-", &input_rect,
 				DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
 		}
 		else {
-			std::string str(Graph_IO::input.length(), '*');
-			Graph_IO::draw_text(MIDNIGHTBLUE, str + "<-", &input_rect,
+			std::string str(Graphio::input.length(), '*');
+			Graphio::draw_text(MIDNIGHTBLUE, str + "<-", &input_rect,
 				DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
 		}
 		if (state == CheckPassword || 
 			state == CheckID || 
 			state == CheckVariable || 
 			state == CheckValue) {
-			Graph_IO::draw_text(LIMEGREEN, feedback, &feedback_rect,
+			Graphio::draw_text(LIMEGREEN, feedback, &feedback_rect,
 				DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		}
 		else if (state == InputValue) {
-			Graph_IO::draw_text(LIMEGREEN, feedback, &feedback_rect,
+			Graphio::draw_text(LIMEGREEN, feedback, &feedback_rect,
 				DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 		}
 		else if (check_mistaken) {
-			Graph_IO::draw_text(FIREBRICK3, feedback, &feedback_rect,
+			Graphio::draw_text(FIREBRICK3, feedback, &feedback_rect,
 				DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		}
 	}
@@ -99,38 +99,38 @@ void ArithAdmin::proceed() {
 }
 void ArithAdmin::input(const ExMessage& msg) {
 	if (state == InputPassword) {
-		Graph_IO::input_text(msg);
+		Graphio::input_text(msg);
 		if (msg.message == WM_KEYDOWN && 
 			(msg.vkcode == VK_RETURN ||
 				msg.vkcode == VK_SEPARATOR)) {
 			state = CheckPassword;
-			Graph_IO::input.pop_back();
+			Graphio::input.pop_back();
 		}
 	}else if (state == InputID) {
-		Graph_IO::input_text(msg);
+		Graphio::input_text(msg);
 		if (msg.message == WM_KEYDOWN &&
 			(msg.vkcode == VK_RETURN ||
 				msg.vkcode == VK_SEPARATOR)) {
 			state = CheckID;
-			Graph_IO::input.pop_back();
+			Graphio::input.pop_back();
 		}
 	}
 	else if (state == InputVariable) {
-		Graph_IO::input_text(msg);
+		Graphio::input_text(msg);
 		if (msg.message == WM_KEYDOWN &&
 			(msg.vkcode == VK_RETURN ||
 				msg.vkcode == VK_SEPARATOR)) {
 			state = CheckVariable;
-			Graph_IO::input.pop_back();
+			Graphio::input.pop_back();
 		}
 	}
 	else if (state == InputValue) {
-		Graph_IO::input_text(msg);
+		Graphio::input_text(msg);
 		if (msg.message == WM_KEYDOWN &&
 			(msg.vkcode == VK_RETURN ||
 				msg.vkcode == VK_SEPARATOR)) {
 			state = CheckValue;
-			Graph_IO::input.pop_back();
+			Graphio::input.pop_back();
 		}
 	}
 	if (msg.message == WM_KEYDOWN) {
@@ -170,7 +170,7 @@ void ArithAdmin::input(const ExMessage& msg) {
 }
 void ArithAdmin::exit() {
 	delete current;
-	Graph_IO::input.clear();
+	Graphio::input.clear();
 }
 
 void ArithAdmin::input_password() {
@@ -180,11 +180,11 @@ void ArithAdmin::check_password() {
 	out = "输入结束。";
 	std::string password;
 	Arithmetic::get_password(password);
-	if (Graph_IO::input == password) {
+	if (Graphio::input == password) {
 		if (loading.proceed_loading(feedback, 5, "密码正确，正在重定向。")) {
 			state = InputID;
 			loading(0);
-			Graph_IO::input.clear();
+			Graphio::input.clear();
 		}
 	}
 	else {
@@ -201,23 +201,23 @@ void ArithAdmin::check_id() {
 	out = "输入结束。";
 	if (!checked) {
 		std::regex rgx("[a-zA-Z0-9_]{1,10}");
-		check_mistaken = !std::regex_match(Graph_IO::input, rgx);
+		check_mistaken = !std::regex_match(Graphio::input, rgx);
 		checked = 1;
 	}
 	if (check_mistaken) {
 		if (loading.proceed_loading(feedback)) {
 			state = InputID;
 			loading(0);
-			Graph_IO::input.clear();
+			Graphio::input.clear();
 			feedback = "ID非法，请重新输入。";
 			checked = 0;
 		}
 	}
 	else {
-		if (Graph_IO::input != "admin") {
+		if (Graphio::input != "admin") {
 			if (loading.proceed_loading(feedback, 5, "该用户名合法，正在加载。")) {
 				current = new Arithmetic();
-				current_id = Graph_IO::input;
+				current_id = Graphio::input;
 				if (current->read()) {
 					current->log("started");
 				}
@@ -225,7 +225,7 @@ void ArithAdmin::check_id() {
 					current->save();
 					current->log("created");
 				}
-				Graph_IO::input.clear();
+				Graphio::input.clear();
 				state = InputVariable;
 				loading(0);
 				checked = 0;
@@ -236,7 +236,7 @@ void ArithAdmin::check_id() {
 				check_mistaken = 1;
 				state = InputID;
 				loading(0);
-				Graph_IO::input.clear();
+				Graphio::input.clear();
 				feedback = "请勿重复输入管理员ID。";
 				checked = 0;
 			}
@@ -291,7 +291,7 @@ void ArithAdmin::check_variable() {
 	if (!checked) {
 		check_mistaken = 1;
 		for (const std::string& var : legal_varible) {
-			if (Graph_IO::input == var) {
+			if (Graphio::input == var) {
 				check_mistaken = 0;
 				break;
 			}
@@ -300,8 +300,8 @@ void ArithAdmin::check_variable() {
 	}
 	if (!check_mistaken) {
 		if (loading.proceed_loading(feedback, 5, "该变量存在，正在跳转。")) {
-			variable = Graph_IO::input;
-			Graph_IO::input.clear();
+			variable = Graphio::input;
+			Graphio::input.clear();
 			checked = 0;
 			state = InputValue;
 			loading(0);
@@ -312,7 +312,7 @@ void ArithAdmin::check_variable() {
 			state = InputVariable;
 			loading(0);
 			checked = 0;
-			Graph_IO::input.clear();
+			Graphio::input.clear();
 			feedback = "该变量不存在，请重新输入。";
 		}
 	}
@@ -409,7 +409,7 @@ void ArithAdmin::input_value() {
 void ArithAdmin::renew_password() {
 	std::ofstream ofs(".\\data\\password.bin", std::ios::binary);
 	if (ofs.is_open()) {
-		std::string original = Graph_IO::input;
+		std::string original = Graphio::input;
 		Arithmetic::encrypt(original);
 		ofs.write(original.data(), original.size());
 		ofs.close();
@@ -420,7 +420,7 @@ void ArithAdmin::check_value() {
 	out = "输入结束。";
 	if (!checked && variable != "password") {
 		std::regex rgx("((0|([1-9][0-9]*))\\s*)+");
-		check_mistaken = !std::regex_match(Graph_IO::input, rgx);
+		check_mistaken = !std::regex_match(Graphio::input, rgx);
 		checked = 1;
 	}
 	if (check_mistaken) {
@@ -428,11 +428,11 @@ void ArithAdmin::check_value() {
 			state = InputValue;
 			loading(0);
 			checked = 0;
-			Graph_IO::input.clear();
+			Graphio::input.clear();
 		}
 	}
 	else {
-		std::istringstream iss(Graph_IO::input);
+		std::istringstream iss(Graphio::input);
 		size_t length = variable.length();
 		auto switch_operation = [&](const size_t i) {
 			if (length == 3) {
@@ -517,10 +517,10 @@ void ArithAdmin::check_value() {
 		if (loading.proceed_loading(feedback, 5, "已输入，正在保存。")) {
 			current->save();
 			if (variable == "password") {
-				Graph_IO::input = "/invisible/";
+				Graphio::input = "/invisible/";
 			}
-			current->log(variable + "->" + Graph_IO::input);
-			Graph_IO::input.clear();
+			current->log(variable + "->" + Graphio::input);
+			Graphio::input.clear();
 			state = AskBack;
 			loading(0);
 			checked = 0;

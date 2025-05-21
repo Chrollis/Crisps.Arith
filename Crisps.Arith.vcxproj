@@ -133,13 +133,15 @@
     <ClInclude Include="arithmetic.h" />
     <ClInclude Include="arith_admin.h" />
     <ClInclude Include="arith_login.h" />
-    <ClInclude Include="controller.h" />
-    <ClInclude Include="graph_io.h" />
+    <ClInclude Include="fps_controller.h" />
+    <ClInclude Include="graphio.h" />
     <ClInclude Include="guess_number.h" />
     <ClInclude Include="main_menu.h" />
     <ClInclude Include="points_24.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="scene.h" />
+    <ClInclude Include="scene_controller.h" />
+    <ClInclude Include="timer.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -155,13 +157,15 @@
     <ClCompile Include="arithmetic.cpp" />
     <ClCompile Include="arith_admin.cpp" />
     <ClCompile Include="arith_login.cpp" />
-    <ClCompile Include="controller.cpp" />
-    <ClCompile Include="graph_io.cpp" />
+    <ClCompile Include="fps_controller.cpp" />
+    <ClCompile Include="graphio.cpp" />
     <ClCompile Include="guess_number.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main_menu.cpp" />
     <ClCompile Include="points_24.cpp" />
     <ClCompile Include="scene.cpp" />
+    <ClCompile Include="scene_controller.cpp" />
+    <ClCompile Include="timer.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

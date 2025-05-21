@@ -5,7 +5,7 @@ void MainMenu::enter() {
 	enter_loading(5, "菜单界面加载中。");
 }
 void MainMenu::draw() {
-	Graph_IO::set_text_style(L"霞鹜漫黑");
+	Graphio::set_text_style(L"霞鹜漫黑");
 	setbkmode(TRANSPARENT);
 	setlinestyle(PS_SOLID, 1);
 
@@ -13,11 +13,11 @@ void MainMenu::draw() {
 		state == CheckMode) {
 		normal_draw();
 		if (state == CheckMode) {
-			Graph_IO::draw_text(LIMEGREEN, feedback, &feedback_rect,
+			Graphio::draw_text(LIMEGREEN, feedback, &feedback_rect,
 				DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		}
 		else if (mode_check_mistaken) {
-			Graph_IO::draw_text(FIREBRICK3, feedback, &feedback_rect,
+			Graphio::draw_text(FIREBRICK3, feedback, &feedback_rect,
 				DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		}
 	}
@@ -48,12 +48,12 @@ void MainMenu::proceed() {
 }
 void MainMenu::input(const ExMessage& msg) {
 	if (state == InputMode) {
-		Graph_IO::input_text(msg);
+		Graphio::input_text(msg);
 		if (msg.message == WM_KEYDOWN &&
 			(msg.vkcode == VK_RETURN ||
 				msg.vkcode == VK_SEPARATOR)) {
 			state = CheckMode;
-			Graph_IO::input.pop_back();
+			Graphio::input.pop_back();
 		}
 	}
 	if (msg.message == WM_KEYDOWN) {
@@ -76,7 +76,7 @@ void MainMenu::input(const ExMessage& msg) {
 	}
 }
 void MainMenu::exit() {
-	Graph_IO::input.clear();
+	Graphio::input.clear();
 }
 
 void MainMenu::input_mode() {
@@ -92,7 +92,7 @@ void MainMenu::check_mode() {
 	if (!mode_checked) {
 		mode_check_mistaken = 1;
 		for (const std::string& mode : legal_mode) {
-			if (Graph_IO::input == mode) {
+			if (Graphio::input == mode) {
 				mode_check_mistaken = 0;
 				break;
 			}
@@ -101,7 +101,7 @@ void MainMenu::check_mode() {
 	}
 	if (!mode_check_mistaken) {
 		if (loading.proceed_loading(feedback, 5, "该模式存在，正在跳转。")) {
-			current_mode = Graph_IO::input;
+			current_mode = Graphio::input;
 			current_ended = 1;
 		}
 	}
@@ -109,7 +109,7 @@ void MainMenu::check_mode() {
 		if (loading.proceed_loading(feedback)) {
 			state = InputMode;
 			loading(0);
-			Graph_IO::input.clear();
+			Graphio::input.clear();
 			mode_checked = 0;
 			feedback = "该模式不存在，请重新输入。";
 		}

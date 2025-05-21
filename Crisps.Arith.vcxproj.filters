@@ -27,10 +27,10 @@
     <ClInclude Include="main_menu.h">
       <Filter>头文件\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="controller.h">
+    <ClInclude Include="fps_controller.h">
       <Filter>头文件\Other</Filter>
     </ClInclude>
-    <ClInclude Include="graph_io.h">
+    <ClInclude Include="graphio.h">
       <Filter>头文件\Other</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
@@ -54,6 +54,12 @@
     <ClInclude Include="points_24.h">
       <Filter>头文件\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="scene_controller.h">
+      <Filter>头文件\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="timer.h">
+      <Filter>头文件\Other</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">
@@ -75,10 +81,10 @@
     <ClCompile Include="scene.cpp">
       <Filter>头文件\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="controller.cpp">
+    <ClCompile Include="fps_controller.cpp">
       <Filter>头文件\Other</Filter>
     </ClCompile>
-    <ClCompile Include="graph_io.cpp">
+    <ClCompile Include="graphio.cpp">
       <Filter>头文件\Other</Filter>
     </ClCompile>
     <ClCompile Include="utils.cpp">
@@ -101,6 +107,12 @@
     </ClCompile>
     <ClCompile Include="points_24.cpp">
       <Filter>头文件\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene_controller.cpp">
+      <Filter>头文件\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="timer.cpp">
+      <Filter>头文件\Other</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

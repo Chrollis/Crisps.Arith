@@ -15,40 +15,40 @@ void Arithmetic::enter() {
 	}
 }
 void Arithmetic::draw() {
-	Graph_IO::set_text_style(L"霞鹜漫黑");
+	Graphio::set_text_style(L"霞鹜漫黑");
 	setbkmode(TRANSPARENT);
 	setlinestyle(PS_SOLID, 1);
 
 	if (state == InputAnswer ||
 		state == CheckAnswer) {
 		normal_draw();
-		Graph_IO::draw_text(DARKVIOLET, show_score, &question_rect,
+		Graphio::draw_text(DARKVIOLET, show_score, &question_rect,
 			DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		if (state == InputAnswer && !answer_check_mistaken) {
-			Graph_IO::draw_text(LIMEGREEN, feedback, &feedback_rect,
+			Graphio::draw_text(LIMEGREEN, feedback, &feedback_rect,
 				DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		}
 		else if (answer_check_mistaken) {
-			Graph_IO::draw_text(FIREBRICK3, feedback, &feedback_rect,
+			Graphio::draw_text(FIREBRICK3, feedback, &feedback_rect,
 				DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		}
 		else {
 			if (last_wrong) {
-				Graph_IO::draw_text(FIREBRICK3, feedback, &feedback_rect,
+				Graphio::draw_text(FIREBRICK3, feedback, &feedback_rect,
 					DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 			}
 			else {
-				Graph_IO::draw_text(LIMEGREEN, feedback, &feedback_rect,
+				Graphio::draw_text(LIMEGREEN, feedback, &feedback_rect,
 					DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 			}
 		}
 	}
 	else if (state == SettleScore) {
-		Graph_IO::draw_text(BLACK, out, &question_rect, 
+		Graphio::draw_text(BLACK, out, &question_rect, 
 			DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-		Graph_IO::draw_text(LIMEGREEN, feedback, &input_rect,
+		Graphio::draw_text(LIMEGREEN, feedback, &input_rect,
 			DT_CENTER | DT_VCENTER | DT_SINGLELINE);
-		Graph_IO::draw_text(MIDNIGHTBLUE, show_score, &feedback_rect,
+		Graphio::draw_text(MIDNIGHTBLUE, show_score, &feedback_rect,
 			DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 	}
 	else {
@@ -89,12 +89,12 @@ void Arithmetic::proceed() {
 }
 void Arithmetic::input(const ExMessage& msg) {
 	if (state == InputAnswer) {
-		Graph_IO::input_text(msg);
+		Graphio::input_text(msg);
 		if (msg.message == WM_KEYDOWN &&
 			(msg.vkcode == VK_RETURN ||
 				msg.vkcode == VK_SEPARATOR)) {
 			state = CheckAnswer;
-			Graph_IO::input.pop_back();
+			Graphio::input.pop_back();
 		}
 	}
 	if (msg.message == WM_KEYDOWN) {
@@ -145,7 +145,7 @@ void Arithmetic::input(const ExMessage& msg) {
 	}
 }
 void Arithmetic::exit() {
-	Graph_IO::input.clear();
+	Graphio::input.clear();
 }
 
 void Arithmetic::generate_question() {
@@ -205,16 +205,16 @@ void Arithmetic::input_answer() {
 void Arithmetic::check_answer() {
 	if (!answer_checked) {
 		std::regex rgx("(-?(0|([1-9][0-9]*)))(\\.{3}(0|([1-9][0-9]*)))?");
-		answer_check_mistaken = !std::regex_match(Graph_IO::input, rgx);
+		answer_check_mistaken = !std::regex_match(Graphio::input, rgx);
 	}
 	if (answer_check_mistaken) {
 		feedback = "非法输入，请重新输入。";
 		state = InputAnswer;
 		answer_checked = 0;
-		Graph_IO::input.clear();
+		Graphio::input.clear();
 	}
 	else {
-		if (Graph_IO::input == answer) {
+		if (Graphio::input == answer) {
 			last_wrong = 0;
 			feedback = "回答正确。";
 			score += max(0, (int)(bonus.range * (1 - (double)thinking.timer / bonus.time)));
@@ -234,7 +234,7 @@ void Arithmetic::check_answer() {
 		else {
 			state = InputAnswer;
 		}
-		Graph_IO::input.clear();
+		Graphio::input.clear();
 	}
 }
 void Arithmetic::settle_score() {

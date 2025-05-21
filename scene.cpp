@@ -16,21 +16,21 @@ std::string Scene::current_mode;
 bool Scene::current_ended = 0;
 
 void Scene::enter_loading(const int circle, const std::string& out_str) {
-	Graph_IO::set_text_style(L"Ï¼ğÍÂşºÚ");
+	Graphio::set_text_style(L"Ï¼ğÍÂşºÚ");
 	setbkmode(TRANSPARENT);
 	setlinestyle(PS_SOLID, 2);
 	const std::string loading = "/-\\-";
 	std::string temp;
 
 	for (int i = 0; i < circle; i++) {
-		Graph_IO::solid_rectangle(LIGHTGRAY, 0, 0, WIDTH, HEIGHT);
+		Graphio::solid_rectangle(LIGHTGRAY, 0, 0, WIDTH, HEIGHT);
 		setlinestyle(PS_SOLID, 2);
-		Graph_IO::fill_round_rectangle(WHITE, BLACK,
+		Graphio::fill_round_rectangle(WHITE, BLACK,
 			(int)(0.2 * SIDE), (int)(0.2 * SIDE),
 			WIDTH - (int)(0.2 * SIDE), HEIGHT - (int)(0.2 * SIDE),
 			(int)(0.4 * SIDE), (int)(0.4 * SIDE));
 		temp = out_str + loading[i % 4];
-		Graph_IO::draw_text(BLACK, temp, &screen_rect,
+		Graphio::draw_text(BLACK, temp, &screen_rect,
 			DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 		FlushBatchDraw();
 		Sleep(WAIT);
@@ -43,7 +43,7 @@ void Scene::greyify_blur_screen(double para, int radius, double sigma) {
 		p_screen[i] = RGBtoGRAY(int(0.6 * p_screen[i]));
 	}
 	IMAGE temp_screen = IMAGE(WIDTH, HEIGHT);
-	Graph_IO::gaussian_blur(&screen, &temp_screen, radius, sigma);
+	Graphio::gaussian_blur(&screen, &temp_screen, radius, sigma);
 	DWORD* p_temp_screen = GetImageBuffer(&temp_screen);
 	for (int i = 0; i < WIDTH * HEIGHT; i++) {
 		p_screen[i] = RGBtoGRAY(p_temp_screen[i]);
@@ -51,19 +51,19 @@ void Scene::greyify_blur_screen(double para, int radius, double sigma) {
 }
 
 void Scene::normal_draw() const {
-	Graph_IO::output_line(DARKGRAY, input_line_position);
-	Graph_IO::draw_text(BLACK, out, &question_rect,
+	Graphio::output_line(DARKGRAY, input_line_position);
+	Graphio::draw_text(BLACK, out, &question_rect,
 		DT_LEFT | DT_VCENTER | DT_SINGLELINE);
-	Graph_IO::draw_text(MIDNIGHTBLUE, Graph_IO::input + "<-", &input_rect,
+	Graphio::draw_text(MIDNIGHTBLUE, Graphio::input + "<-", &input_rect,
 		DT_LEFT | DT_VCENTER | DT_SINGLELINE | DT_NOPREFIX);
 }
 void Scene::pop_up_draw() const {
 	putimage(0, 0, &screen);
-	Graph_IO::fill_round_rectangle(WHITE, BLACK,
+	Graphio::fill_round_rectangle(WHITE, BLACK,
 		SIDE / 2, HEIGHT / 2 - SIDE * 3 / 5,
 		WIDTH - SIDE / 2, HEIGHT / 2 + SIDE * 3 / 5,
 		SIDE * 2 / 5, SIDE * 2 / 5);
-	Graph_IO::draw_text(BLACK, out, &screen_rect,
+	Graphio::draw_text(BLACK, out, &screen_rect,
 		DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 }
 

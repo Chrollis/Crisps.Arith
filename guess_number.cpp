@@ -4,7 +4,7 @@ void GuessNumber::enter() {
 	enter_loading(5, "数字炸弹加载中。");
 }
 void GuessNumber::draw() {
-	Graph_IO::set_text_style(L"霞鹜漫黑");
+	Graphio::set_text_style(L"霞鹜漫黑");
 	setbkmode(TRANSPARENT);
 	setlinestyle(PS_SOLID, 1);
 
@@ -12,11 +12,11 @@ void GuessNumber::draw() {
 		state == CheckNum) {
 		normal_draw();
 		if (state == CheckNum) {
-			Graph_IO::draw_text(LIMEGREEN, feedback, &feedback_rect,
+			Graphio::draw_text(LIMEGREEN, feedback, &feedback_rect,
 				DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		}
 		else if (num_check_mistaken) {
-			Graph_IO::draw_text(FIREBRICK3, feedback, &feedback_rect,
+			Graphio::draw_text(FIREBRICK3, feedback, &feedback_rect,
 				DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		}
 	}
@@ -50,12 +50,12 @@ void GuessNumber::proceed() {
 }
 void GuessNumber::input(const ExMessage& msg) {
 	if (state == InputNum) {
-		Graph_IO::input_text(msg);
+		Graphio::input_text(msg);
 		if (msg.message == WM_KEYDOWN &&
 			(msg.vkcode == VK_RETURN ||
 				msg.vkcode == VK_SEPARATOR)) {
 			state = CheckNum;
-			Graph_IO::input.pop_back();
+			Graphio::input.pop_back();
 		}
 	}
 	if (msg.message == WM_KEYDOWN) {
@@ -91,7 +91,7 @@ void GuessNumber::input(const ExMessage& msg) {
 	}
 }
 void GuessNumber::exit() {
-	Graph_IO::input.clear();
+	Graphio::input.clear();
 }
 
 void GuessNumber::generate_num() {
@@ -112,11 +112,11 @@ void GuessNumber::check_num() {
 	out = "输入结束。";
 	if (!num_checked) {
 		std::regex rgx("[0-9]{1,10}");
-		num_check_mistaken = !std::regex_match(Graph_IO::input, rgx);
+		num_check_mistaken = !std::regex_match(Graphio::input, rgx);
 		num_checked = 1;
 	}
 	if (!num_check_mistaken) {
-		std::istringstream iss(Graph_IO::input);
+		std::istringstream iss(Graphio::input);
 		iss >> m;
 		if (m > a && m < b) {
 			if (loading.proceed_loading(feedback, 5, "判断中。")) {
@@ -149,7 +149,7 @@ void GuessNumber::check_num() {
 					}
 				}
 				loading(0);
-				Graph_IO::input.clear();
+				Graphio::input.clear();
 			}
 		}
 		else {
@@ -158,7 +158,7 @@ void GuessNumber::check_num() {
 				num_check_mistaken = 1;
 				state = InputNum;
 				loading(0);
-				Graph_IO::input.clear();
+				Graphio::input.clear();
 				feedback = "输入出界，请重新输入。";
 			}
 		}
@@ -169,7 +169,7 @@ void GuessNumber::check_num() {
 			loading(0);
 			num_checked = 0;
 			feedback = "非法输入，请重新输入。";
-			Graph_IO::input.clear();
+			Graphio::input.clear();
 		}
 	}
 }

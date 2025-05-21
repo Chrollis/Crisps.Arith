@@ -4,7 +4,7 @@ void Points24::enter() {
 	enter_loading(5, "24点加载中。");
 }
 void Points24::draw() {
-	Graph_IO::set_text_style(L"霞鹜漫黑");
+	Graphio::set_text_style(L"霞鹜漫黑");
 	setbkmode(TRANSPARENT);
 	setlinestyle(PS_SOLID, 1);
 
@@ -12,16 +12,16 @@ void Points24::draw() {
 		state == Compute) {
 		normal_draw();
 		if (state == Compute && !input_check_mistaken) {
-			Graph_IO::draw_text(LIMEGREEN, feedback, &feedback_rect,
+			Graphio::draw_text(LIMEGREEN, feedback, &feedback_rect,
 				DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		}
 		else if (state == InputNum) {
-			Graph_IO::draw_text(DARKVIOLET, feedback, &feedback_rect,
+			Graphio::draw_text(DARKVIOLET, feedback, &feedback_rect,
 				DT_LEFT | DT_VCENTER | DT_SINGLELINE);
-			Graph_IO::output_text(DARKVIOLET, feedback_rect.left, feedback_rect.bottom, feedbackA);
+			Graphio::output_text(DARKVIOLET, feedback_rect.left, feedback_rect.bottom, feedbackA);
 		}
 		else if (input_check_mistaken) {
-			Graph_IO::draw_text(FIREBRICK3, feedback, &feedback_rect,
+			Graphio::draw_text(FIREBRICK3, feedback, &feedback_rect,
 				DT_RIGHT | DT_VCENTER | DT_SINGLELINE);
 		}
 	}
@@ -61,12 +61,12 @@ void Points24::proceed() {
 }
 void Points24::input(const ExMessage& msg) {
 	if (state == InputNum) {
-		Graph_IO::input_text(msg);
+		Graphio::input_text(msg);
 		if (msg.message == WM_KEYDOWN &&
 			(msg.vkcode == VK_RETURN ||
 				msg.vkcode == VK_SEPARATOR)) {
 			state = Compute;
-			Graph_IO::input.pop_back();
+			Graphio::input.pop_back();
 		}
 	}
 	if (msg.message == WM_KEYDOWN) {
@@ -136,7 +136,7 @@ void Points24::input(const ExMessage& msg) {
 	}
 }
 void Points24::exit() {
-	Graph_IO::input.clear();
+	Graphio::input.clear();
 }
 
 void Points24::generate_num() {
@@ -181,17 +181,17 @@ void Points24::input_num() {
 }
 void Points24::compute() {
 	out = "输入结束。";
-	if (Graph_IO::input == "uns") {
+	if (Graphio::input == "uns") {
 		state = ConfirmSolvable;
-		Graph_IO::input.clear();
+		Graphio::input.clear();
 		if (!screenshotted) {
 			greyify_blur_screen();
 			screenshotted = 1;
 		}
 	}
-	else if (Graph_IO::input == "res") {
+	else if (Graphio::input == "res") {
 		state = ConfirmRestart;
-		Graph_IO::input.clear();
+		Graphio::input.clear();
 		if (!screenshotted) {
 			greyify_blur_screen();
 			screenshotted = 1;
@@ -203,13 +203,13 @@ void Points24::compute() {
 		if (!input_checked) {
 			std::regex letter_rgx("^([a-d])([+\\-*/])(?!\\1)([a-d])$");
 			std::regex digit_rgx("^((?:0|[1-9]\\d*)(?:\\.\\d{2}))([+\\-*/])((?:0|[1-9]\\d*)(?:\\.\\d{2}))$");
-			if (std::regex_match(Graph_IO::input, sm, letter_rgx)) {
+			if (std::regex_match(Graphio::input, sm, letter_rgx)) {
 				A = sm[1];
 				op = sm[2];
 				B = sm[3];
 				letter_or_digit = Letter;
 			}
-			else if (std::regex_match(Graph_IO::input, sm, digit_rgx)) {
+			else if (std::regex_match(Graphio::input, sm, digit_rgx)) {
 				A = sm[1];
 				op = sm[2];
 				B = sm[3];
@@ -225,7 +225,7 @@ void Points24::compute() {
 				state = InputNum;
 				input_checked = 0;
 				loading(0);
-				Graph_IO::input.clear();
+				Graphio::input.clear();
 			}
 		}
 		else {
@@ -277,7 +277,7 @@ void Points24::compute() {
 						[](std::pair<char, double> a, std::pair<char, double> b) {
 							return a.first < b.first;
 						});
-					Graph_IO::input.clear();
+					Graphio::input.clear();
 					if (nums.size() == 1) {
 						if (abs(result - 24) < EPSILON) {
 							num_generated = 0;
@@ -297,7 +297,7 @@ void Points24::compute() {
 					if (loading.proceed_loading(feedback, 5, "除数为零，请重新输入。")) {
 						state = InputNum;
 						loading(0);
-						Graph_IO::input.clear();
+						Graphio::input.clear();
 						input_checked = 0;
 					}
 				}
@@ -306,7 +306,7 @@ void Points24::compute() {
 				if (loading.proceed_loading(feedback, 5, "所输入数字或字母不可用。")) {
 					state = InputNum;
 					loading(0);
-					Graph_IO::input.clear();
+					Graphio::input.clear();
 					input_checked = 0;
 				}
 			}

@@ -1,4 +1,5 @@
-#include "controller.h"
+#include "scene_controller.h"
+#include "fps_controller.h"
 
 int WinMain(
     _In_ HINSTANCE hInstance,
