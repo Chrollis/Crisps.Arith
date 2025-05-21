@@ -1,8 +1,6 @@
 #pragma once
 #include "graph_io.h"
 
-#define WAIT 300
-
 enum SceneType {
 	STMainMenu,
 	STArithLogin,
@@ -47,15 +45,3 @@ protected:
 	void pop_up_draw() const;
 };
 
-class Loading {
-private:
-	int timer = 0;
-	short counter = 0;
-	bool started = 0;
-public:
-	Loading() = default;
-	~Loading() = default;
-	void reset();
-	void timekeep(clock_t delta);
-	bool proceed_loading(std::string& feedback, const int circle = 5, const std::string& feedback_str = "正在处理请求，请稍后。");
-};

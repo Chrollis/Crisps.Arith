@@ -25,7 +25,7 @@ void ArithLogin::draw() {
 	}
 }
 void ArithLogin::timekeep(clock_t delta) {
-	la.timekeep(delta);
+	loading += delta;
 }
 void ArithLogin::proceed() {
 	switch (state) {
@@ -89,9 +89,9 @@ void ArithLogin::check_id() {
 		id_checked = 1;
 	}
 	if (id_check_mistaken) {
-		if (la.proceed_loading(feedback)) {
+		if (loading.proceed_loading(feedback)) {
 			state = InputID;
-			la.reset();
+			loading(0);
 			Graph_IO::input.clear();
 			id_checked = 0;
 			feedback = "ID非法，请重新输入。";
@@ -99,14 +99,14 @@ void ArithLogin::check_id() {
 	}
 	else {
 		if (Graph_IO::input != "admin") {
-			if (la.proceed_loading(feedback, 5, "该用户名合法，正在加载。")) {
+			if (loading.proceed_loading(feedback, 5, "该用户名合法，正在加载。")) {
 				current_id = Graph_IO::input;
 				current_mode = "arithmetic";
 				current_ended = 1;
 			}
 		}
 		else {
-			if (la.proceed_loading(feedback, 5, "正在加载管理员系统。")) {
+			if (loading.proceed_loading(feedback, 5, "正在加载管理员系统。")) {
 				current_mode = "arith_admin";
 				current_ended = 1;
 			}
@@ -121,7 +121,7 @@ void ArithLogin::ask_quit() {
 	}
 }
 void ArithLogin::quit() {
-	if (la.proceed_loading(out, 5, "正在返回主菜单。")) {
+	if (loading.proceed_loading(out, 5, "正在返回主菜单。")) {
 		current_mode = "menu";
 		current_ended = 1;
 	}

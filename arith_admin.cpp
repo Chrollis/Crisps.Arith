@@ -49,7 +49,7 @@ void ArithAdmin::draw() {
 	}
 }
 void ArithAdmin::timekeep(clock_t delta) {
-	la.timekeep(delta);
+	loading += delta;
 }
 void ArithAdmin::proceed() {
 	switch (state)
@@ -181,14 +181,14 @@ void ArithAdmin::check_password() {
 	std::string password;
 	Arithmetic::get_password(password);
 	if (Graph_IO::input == password) {
-		if (la.proceed_loading(feedback, 5, "密码正确，正在重定向。")) {
+		if (loading.proceed_loading(feedback, 5, "密码正确，正在重定向。")) {
 			state = InputID;
-			la.reset();
+			loading(0);
 			Graph_IO::input.clear();
 		}
 	}
 	else {
-		if (la.proceed_loading(feedback, 5, "密码错误，程序终止。")) {
+		if (loading.proceed_loading(feedback, 5, "密码错误，程序终止。")) {
 			current_mode = "exit";
 			current_ended = 1;
 		}
@@ -205,9 +205,9 @@ void ArithAdmin::check_id() {
 		checked = 1;
 	}
 	if (check_mistaken) {
-		if (la.proceed_loading(feedback)) {
+		if (loading.proceed_loading(feedback)) {
 			state = InputID;
-			la.reset();
+			loading(0);
 			Graph_IO::input.clear();
 			feedback = "ID非法，请重新输入。";
 			checked = 0;
@@ -215,7 +215,7 @@ void ArithAdmin::check_id() {
 	}
 	else {
 		if (Graph_IO::input != "admin") {
-			if (la.proceed_loading(feedback, 5, "该用户名合法，正在加载。")) {
+			if (loading.proceed_loading(feedback, 5, "该用户名合法，正在加载。")) {
 				current = new Arithmetic();
 				current_id = Graph_IO::input;
 				if (current->read()) {
@@ -227,15 +227,15 @@ void ArithAdmin::check_id() {
 				}
 				Graph_IO::input.clear();
 				state = InputVariable;
-				la.reset();
+				loading(0);
 				checked = 0;
 			}
 		}
 		else {
-			if (la.proceed_loading(feedback)) {
+			if (loading.proceed_loading(feedback)) {
 				check_mistaken = 1;
 				state = InputID;
-				la.reset();
+				loading(0);
 				Graph_IO::input.clear();
 				feedback = "请勿重复输入管理员ID。";
 				checked = 0;
@@ -299,18 +299,18 @@ void ArithAdmin::check_variable() {
 		checked = 1;
 	}
 	if (!check_mistaken) {
-		if (la.proceed_loading(feedback, 5, "该变量存在，正在跳转。")) {
+		if (loading.proceed_loading(feedback, 5, "该变量存在，正在跳转。")) {
 			variable = Graph_IO::input;
 			Graph_IO::input.clear();
 			checked = 0;
 			state = InputValue;
-			la.reset();
+			loading(0);
 		}
 	}
 	else {
-		if (la.proceed_loading(feedback)) {
+		if (loading.proceed_loading(feedback)) {
 			state = InputVariable;
-			la.reset();
+			loading(0);
 			checked = 0;
 			Graph_IO::input.clear();
 			feedback = "该变量不存在，请重新输入。";
@@ -424,9 +424,9 @@ void ArithAdmin::check_value() {
 		checked = 1;
 	}
 	if (check_mistaken) {
-		if (la.proceed_loading(feedback, 5, "输入有非数字或空格字符。")) {
+		if (loading.proceed_loading(feedback, 5, "输入有非数字或空格字符。")) {
 			state = InputValue;
-			la.reset();
+			loading(0);
 			checked = 0;
 			Graph_IO::input.clear();
 		}
@@ -514,7 +514,7 @@ void ArithAdmin::check_value() {
 		default:
 			break;
 		}
-		if (la.proceed_loading(feedback, 5, "已输入，正在保存。")) {
+		if (loading.proceed_loading(feedback, 5, "已输入，正在保存。")) {
 			current->save();
 			if (variable == "password") {
 				Graph_IO::input = "/invisible/";
@@ -522,7 +522,7 @@ void ArithAdmin::check_value() {
 			current->log(variable + "->" + Graph_IO::input);
 			Graph_IO::input.clear();
 			state = AskBack;
-			la.reset();
+			loading(0);
 			checked = 0;
 			if (!screenshotted) {
 				greyify_blur_screen();
@@ -535,15 +535,15 @@ void ArithAdmin::ask_back() {
 	out = "返回至用户或变量选择【U/V】?";
 }
 void ArithAdmin::back_user() {
-	if (la.proceed_loading(out, 5, "正在返回用户选择界面。")) {
+	if (loading.proceed_loading(out, 5, "正在返回用户选择界面。")) {
 		state = InputID;
-		la.reset();
+		loading(0);
 	}
 }
 void ArithAdmin::back_variable() {
-	if (la.proceed_loading(out, 5, "正在返回变量选择界面。")) {
+	if (loading.proceed_loading(out, 5, "正在返回变量选择界面。")) {
 		state = InputVariable;
-		la.reset();
+		loading(0);
 	}
 }
 void ArithAdmin::ask_quit() {
@@ -554,7 +554,7 @@ void ArithAdmin::ask_quit() {
 	}
 }
 void ArithAdmin::quit() {
-	if (la.proceed_loading(out, 5, "正在返回登录界面。")) {
+	if (loading.proceed_loading(out, 5, "正在返回登录界面。")) {
 		current_mode = "kousuan";
 		current_ended = 1;
 	}

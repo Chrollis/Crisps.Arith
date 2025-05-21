@@ -25,7 +25,7 @@ void GuessNumber::draw() {
 	}
 }
 void GuessNumber::timekeep(clock_t delta) {
-	la.timekeep(delta);
+	loading += delta;
 }
 void GuessNumber::proceed() {
 	switch (state) {
@@ -119,7 +119,7 @@ void GuessNumber::check_num() {
 		std::istringstream iss(Graph_IO::input);
 		iss >> m;
 		if (m > a && m < b) {
-			if (la.proceed_loading(feedback, 5, "判断中。")) {
+			if (loading.proceed_loading(feedback, 5, "判断中。")) {
 				if (m != c) {
 					if (m < c) {
 						a = m;
@@ -148,25 +148,25 @@ void GuessNumber::check_num() {
 						screenshotted = 1;
 					}
 				}
-				la.reset();
+				loading(0);
 				Graph_IO::input.clear();
 			}
 		}
 		else {
-			if (la.proceed_loading(feedback, 5, "判断中。")) {
+			if (loading.proceed_loading(feedback, 5, "判断中。")) {
 				num_checked = 0;
 				num_check_mistaken = 1;
 				state = InputNum;
-				la.reset();
+				loading(0);
 				Graph_IO::input.clear();
 				feedback = "输入出界，请重新输入。";
 			}
 		}
 	}
 	else {
-		if (la.proceed_loading(feedback)) {
+		if (loading.proceed_loading(feedback)) {
 			state = InputNum;
-			la.reset();
+			loading(0);
 			num_checked = 0;
 			feedback = "非法输入，请重新输入。";
 			Graph_IO::input.clear();
@@ -189,7 +189,7 @@ void GuessNumber::ask_quit() {
 	}
 }
 void GuessNumber::quit() {
-	if (la.proceed_loading(out, 5, "正在返回主菜单。")) {
+	if (loading.proceed_loading(out, 5, "正在返回主菜单。")) {
 		current_mode = "menu";
 		current_ended = 1;
 	}

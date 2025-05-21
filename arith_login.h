@@ -8,7 +8,7 @@ private:
 	bool id_check_mistaken = 0;
 	bool screenshotted = 0;
 	bool id_checked = 0;
-	Loading la;
+	Timer loading;
 public:
 	ArithLogin() = default;
 	~ArithLogin() = default;

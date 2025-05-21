@@ -67,30 +67,3 @@ void Scene::pop_up_draw() const {
 		DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 }
 
-void Loading::reset() {
-	timer = 0;
-	counter = 0;
-	started = 0;
-}
-void Loading::timekeep(clock_t delta) {
-	timer += delta;
-}
-bool Loading::proceed_loading(std::string& feedback, const int circle, const std::string& feedback_str) {
-	const std::string loading = "/-\\-";
-	if (!started) {
-		timer = 0;
-		counter = 0;
-		started = 1;
-	}
-	if (timer > WAIT) {
-		timer -= WAIT;
-		counter += 1;
-	}
-	if (counter < circle) {
-		feedback = feedback_str + loading[counter % 4];
-		return 0;
-	}
-	else {
-		return 1;
-	}
-}

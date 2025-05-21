@@ -56,10 +56,8 @@ void Arithmetic::draw() {
 	}
 }
 void Arithmetic::timekeep(clock_t delta) {
-	la.timekeep(delta);
-	if (thinking) {
-		thinking_timer += delta;
-	}
+	loading += delta;
+	thinking += delta;
 }
 void Arithmetic::proceed() {
 	show_score = "当前" + std::to_string(score) + "分。";
@@ -170,11 +168,13 @@ void Arithmetic::generate_question() {
 			do {
 				a = int_rand(current_op.a.min, current_op.a.max);
 				b = int_rand(current_op.b.min, current_op.b.max);
-			} while (a < b);
+			} while (a == 0 || a < b);
 		}
 		else {
-			a = int_rand(current_op.a.min, current_op.a.max);
-			b = int_rand(current_op.b.min, current_op.b.max);
+			do {
+				a = int_rand(current_op.a.min, current_op.a.max);
+				b = int_rand(current_op.b.min, current_op.b.max);
+			} while (a == 0 && b == 0);
 		}
 		if (op_index == 3) {
 			answer = std::to_string(a / b) + "..." + std::to_string(a % b);
@@ -198,7 +198,7 @@ void Arithmetic::input_answer() {
 	if (!question_generated && !last_wrong) {
 		generate_question();
 		question_generated = 1;
-		thinking = 1;
+		thinking(1);
 	}
 	out = question;
 }
@@ -217,9 +217,8 @@ void Arithmetic::check_answer() {
 		if (Graph_IO::input == answer) {
 			last_wrong = 0;
 			feedback = "回答正确。";
-			score += max(0, (int)(bonus.range * (1 - (double)thinking_timer / bonus.time)));
-			thinking = 0;
-			thinking_timer = 0;
+			score += max(0, (int)(bonus.range * (1 - (double)thinking.timer / bonus.time)));
+			thinking(0);
 			question_count += 1;
 			question_generated = 0;
 		}
@@ -254,17 +253,17 @@ void Arithmetic::save_score() {
 		screenshotted = 1;
 	}
 	if (whether_to_save) {
-		if (la.proceed_loading(out, 5, "正在保存，请稍后。")) {
+		if (loading.proceed_loading(out, 5, "正在保存，请稍后。")) {
 			screenshotted = 0;
 			state = AskNewTurn;
-			la.reset();
+			loading(0);
 		}
 	}
 	else {
-		if (la.proceed_loading(out, 5, "已放弃保存，请稍后。")) {
+		if (loading.proceed_loading(out, 5, "已放弃保存，请稍后。")) {
 			screenshotted = 0;
 			state = AskNewTurn;
-			la.reset();
+			loading(0);
 		}
 	}
 }
@@ -279,7 +278,7 @@ void Arithmetic::ask_quit() {
 	}
 }
 void Arithmetic::quit() {
-	if (la.proceed_loading(out, 5, "正在返回主菜单。")) {
+	if (loading.proceed_loading(out, 5, "正在返回主菜单。")) {
 		current_mode = "menu";
 		current_ended = 1;
 	}

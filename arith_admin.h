@@ -10,7 +10,7 @@ private:
 	bool check_mistaken = 0;
 	bool screenshotted = 0;
 	bool checked = 0;
-	Loading la;
+	Timer loading;
 public:
 	ArithAdmin() {
 		CreateDirectoryW(L".\\data", nullptr);

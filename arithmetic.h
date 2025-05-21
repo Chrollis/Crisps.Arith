@@ -30,8 +30,6 @@ private:
 	int last_state = InputAnswer;
 	int wrong_count = 0;
 	int question_count = 0;
-	clock_t thinking_timer = 0;
-	bool thinking = 0;
 	bool answer_check_mistaken = 0;
 	bool screenshotted = 0;
 	bool answer_checked = 0;
@@ -40,7 +38,8 @@ private:
 	bool bonused = 0;
 	bool whether_to_save = 0;
 	
-	Loading la;
+	Timer thinking;
+	Timer loading;
 public:
 	Arithmetic() {
 		CreateDirectoryW(L".\\data", nullptr);

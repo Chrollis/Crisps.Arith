@@ -14,7 +14,7 @@ private:
 	bool num_checked = 0;
 	bool num_generated = 0;
 	bool succeeded = 0;
-	Loading la;
+	Timer loading;
 public:
 	GuessNumber() = default;
 	~GuessNumber() = default;

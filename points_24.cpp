@@ -30,7 +30,7 @@ void Points24::draw() {
 	}
 }
 void Points24::timekeep(clock_t delta) {
-	la.timekeep(delta);
+	loading += delta;
 }
 void Points24::proceed() {
     switch (state) {
@@ -221,10 +221,10 @@ void Points24::compute() {
 			input_checked = 1;
 		}
 		if (input_check_mistaken) {
-			if (la.proceed_loading(feedback, 5, "表达式非法，请重新输入。")) {
+			if (loading.proceed_loading(feedback, 5, "表达式非法，请重新输入。")) {
 				state = InputNum;
 				input_checked = 0;
-				la.reset();
+				loading(0);
 				Graph_IO::input.clear();
 			}
 		}
@@ -294,18 +294,18 @@ void Points24::compute() {
 				}
 				else {
 					input_check_mistaken = 1;
-					if (la.proceed_loading(feedback, 5, "除数为零，请重新输入。")) {
+					if (loading.proceed_loading(feedback, 5, "除数为零，请重新输入。")) {
 						state = InputNum;
-						la.reset();
+						loading(0);
 						Graph_IO::input.clear();
 						input_checked = 0;
 					}
 				}
 			}
 			else {
-				if (la.proceed_loading(feedback, 5, "所输入数字或字母不可用。")) {
+				if (loading.proceed_loading(feedback, 5, "所输入数字或字母不可用。")) {
 					state = InputNum;
-					la.reset();
+					loading(0);
 					Graph_IO::input.clear();
 					input_checked = 0;
 				}
@@ -321,12 +321,12 @@ void Points24::confirm_solvable() {
 		out = "是否确认无解【Y/N】?";
 	}
 	else {
-		if (la.proceed_loading(out, 5, "其实有解，更换题目中。")) {
+		if (loading.proceed_loading(out, 5, "其实有解，更换题目中。")) {
 			solvable_checked = 0;
 			num_generated = 0;
 			screenshotted = 0;
 			state = InputNum;
-			la.reset();
+			loading(0);
 		}
 	}
 }
@@ -341,7 +341,7 @@ void Points24::ask_quit() {
 	}
 }
 void Points24::quit() {
-	if (la.proceed_loading(out, 5, "正在返回主菜单。")) {
+	if (loading.proceed_loading(out, 5, "正在返回主菜单。")) {
 		current_mode = "menu";
 		current_ended = 1;
 	}

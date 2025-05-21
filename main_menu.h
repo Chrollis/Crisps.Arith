@@ -8,7 +8,7 @@ private:
 	bool mode_check_mistaken = 0;
 	bool screenshotted = 0;
 	bool mode_checked = 0;
-	Loading la;
+	Timer loading;
 public:
 	MainMenu() = default;
 	~MainMenu() = default;

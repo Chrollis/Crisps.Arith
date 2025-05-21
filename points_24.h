@@ -15,7 +15,7 @@ class Points24 :public Scene {
 	bool input_checked = 0;
 	bool solvable_checked = 0;
 	bool letter_or_digit = Letter;
-	Loading la;
+	Timer loading;
 public:
 	Points24() = default;
 	~Points24() = default;

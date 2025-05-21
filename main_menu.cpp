@@ -26,7 +26,7 @@ void MainMenu::draw() {
 	}
 }
 void MainMenu::timekeep(clock_t delta) {
-	la.timekeep(delta);
+	loading += delta;
 }
 void MainMenu::proceed() {
 	switch (state) {
@@ -100,15 +100,15 @@ void MainMenu::check_mode() {
 		mode_checked = 1;
 	}
 	if (!mode_check_mistaken) {
-		if (la.proceed_loading(feedback, 5, "该模式存在，正在跳转。")) {
+		if (loading.proceed_loading(feedback, 5, "该模式存在，正在跳转。")) {
 			current_mode = Graph_IO::input;
 			current_ended = 1;
 		}
 	}
 	else {
-		if (la.proceed_loading(feedback)) {
+		if (loading.proceed_loading(feedback)) {
 			state = InputMode;
-			la.reset();
+			loading(0);
 			Graph_IO::input.clear();
 			mode_checked = 0;
 			feedback = "该模式不存在，请重新输入。";
@@ -123,7 +123,7 @@ void MainMenu::ask_quit() {
 	}
 }
 void MainMenu::quit() {
-	if (la.proceed_loading(out, 5, "正在退出。")) {
+	if (loading.proceed_loading(out, 5, "正在退出。")) {
 		current_mode = "exit";
 		current_ended = 1;
 	}
